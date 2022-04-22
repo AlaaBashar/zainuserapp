@@ -105,7 +105,6 @@ class _NavDrawerState extends State<NavDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserData();
   }
   @override
   Widget build(BuildContext context) {
@@ -119,8 +118,8 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             child: Center(
               child: Row(
-                children: const [
-                  Expanded(
+                children:  [
+                  const Expanded(
                     child: Icon(
                       Icons.account_circle,
                       color: Colors.white,
@@ -131,8 +130,18 @@ class _NavDrawerState extends State<NavDrawer> {
                   Expanded(
                     flex: 6,
                     child: Text(
-                      "Write anything",
-                      style: TextStyle(
+                      "${Auth.currentUser!.name}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Text(
+                      "${Auth.currentUser!.email}",
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
@@ -229,10 +238,6 @@ class _NavDrawerState extends State<NavDrawer> {
   void getContract() {
     openNewPage(context, const ContractPage());
   }
-  void getUserData() async{
-    userAppList = (await Api.getUserFromUid(FirebaseAuth.instance.currentUser!.uid)) as List<UserApp>?;
-    setState(() {});
 
-  }
 
 }
