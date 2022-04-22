@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:zainusersapp/pages/splash_page.dart';
 import 'package:zainusersapp/pages/suggestions_page.dart';
 import '../export_feature.dart';
-
 import '../models/ministries_model.dart';
 import '../models/user_model.dart';
 import '../network/api.dart';
 import '../network/auth.dart';
 import '../widget/reusable_cached_network_image.dart';
-import 'complaint_page.dart';
 import 'contract_page.dart';
 import 'my_visits_page.dart';
 import 'offers_page.dart';
@@ -42,48 +40,43 @@ class _HomePageState extends State<HomePage> {
         ),
         body: ministriesList != null
             ? GridView.builder(
+
                 itemCount: ministriesList!.length,
                 padding: const EdgeInsets.all(16.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 1.1),
                 itemBuilder: (_, index) {
                   MinistriesModel model = ministriesList![index];
-                  return InkWell(
-                    onTap: () {
-                      openNewPage(
-                          context, ComplaintPage(ministriesModel: model));
-                    },
-                    child: Card(
-                      elevation: 8,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 8.0,
+                  return Card(
+                    elevation: 8,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(35.0),
+                          child: ReusableCachedNetworkImage(
+                            imageUrl: model.imageUrl!,
+                            height: 70,
+                            width: 70,
+                            fit: BoxFit.fill,
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(35.0),
-                            child: ReusableCachedNetworkImage(
-                              imageUrl: model.imageUrl!,
-                              height: 70,
-                              width: 70,
-                              fit: BoxFit.fill,
-                            ),
+                        ),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
+                        Text(
+                          '${model.title}',
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          Text(
-                            '${model.title}',
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },
