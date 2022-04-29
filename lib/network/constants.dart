@@ -5,6 +5,7 @@ class CollectionsKey {
   static const String SUGGESTIONS = 'Suggestions';
   static const String CONTRACTS = 'Contracts';
   static const String OFFERS = 'Offers';
+  static const String AREAS = 'Areas';
   static const String VISITS = 'Visits';
 
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:zainusersapp/network/auth.dart';
+import '../models/areas_model.dart';
 import '../models/complaint_model.dart';
 import '../models/contract_model.dart';
 import '../models/ministries_model.dart';
@@ -35,12 +36,10 @@ class Api {
   }
 
   static Future<UserApp?> getUserFromUid(String uid) async {
-    DocumentSnapshot documentSnapshot =
-        await db.collection(CollectionsKey.USERS).doc(uid).get();
+    DocumentSnapshot documentSnapshot = await db.collection(CollectionsKey.USERS).doc(uid).get();
 
     if (documentSnapshot.data() != null) {
-      Map<String, dynamic>? map =
-          documentSnapshot.data() as Map<String, dynamic>?;
+      Map<String, dynamic>? map = documentSnapshot.data() as Map<String, dynamic>?;
       UserApp userApp = UserApp.fromJson(map!);
 
       Auth.updateUserInPref(userApp);
@@ -160,10 +159,7 @@ class Api {
   static Future<List<VisitsModel>> getVisits() async {
     List<VisitsModel> visitsList = [];
 
-    QuerySnapshot querySnapshot = await db
-        .collection(CollectionsKey.VISITS)
-        .where('userUid', isEqualTo: Auth.currentUser!.uid)
-        .get();
+    QuerySnapshot querySnapshot = await db.collection(CollectionsKey.VISITS).where('userUid', isEqualTo: Auth.currentUser!.uid).get();
 
     visitsList = querySnapshot.docs
         .map((e) => VisitsModel.fromJson(e.data() as Map<String, dynamic>))
@@ -177,7 +173,6 @@ class Api {
 
   static Future setVisits(VisitsModel model) async {
     DocumentReference doc = db.collection(CollectionsKey.VISITS).doc();
-
     model.id = doc.id;
     await doc.set(model.toJson());
 
@@ -219,6 +214,23 @@ class Api {
 
     return offerList;
   }
+
+  static Future<List<AreasModel>> getAreas() async {
+    List<AreasModel> areasList = [];
+
+    QuerySnapshot querySnapshot = await db.collection(CollectionsKey.AREAS).get();
+
+    areasList = querySnapshot.docs
+        .map((e) => AreasModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+
+    // if(offerModel.isNotEmpty) {
+    //   offerModel.sort((a, b) => b.date!.compareTo(a.date!));
+    // }
+
+    return areasList;
+  }
+
 
 
 }

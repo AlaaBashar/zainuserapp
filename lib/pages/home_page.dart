@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zainusersapp/pages/splash_page.dart';
 import 'package:zainusersapp/pages/suggestions_page.dart';
+import 'package:zainusersapp/pages/user_details_page.dart';
 import '../export_feature.dart';
+import '../models/areas_model.dart';
 import '../models/ministries_model.dart';
 import '../models/user_model.dart';
 import '../network/api.dart';
@@ -21,12 +23,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<MinistriesModel>? ministriesList;
+  List<AreasModel>? areasList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadMinistries();
+    loadAreas();
 
   }
 
@@ -38,41 +41,27 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('الصفحة الرئيسية'),
         ),
-        body: ministriesList != null
+        body: areasList != null
             ? GridView.builder(
-
-                itemCount: ministriesList!.length,
+                itemCount: areasList!.length,
                 padding: const EdgeInsets.all(16.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 1.1),
                 itemBuilder: (_, index) {
-                  MinistriesModel model = ministriesList![index];
+                  AreasModel model = areasList![index];
                   return Card(
                     elevation: 8,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(35.0),
-                          child: ReusableCachedNetworkImage(
-                            imageUrl: model.imageUrl!,
-                            height: 70,
-                            width: 70,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
                         Text(
-                          '${model.title}',
+                          '${model.state}',
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 15.0,
+                            fontSize: 30.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -84,8 +73,8 @@ class _HomePageState extends State<HomePage> {
             : getCenterCircularProgress());
   }
 
-  void loadMinistries() async {
-    ministriesList = await Api.getMinistries();
+  void loadAreas() async {
+    areasList = await Api.getAreas();
     setState(() {});
   }
 }
@@ -112,41 +101,46 @@ class _NavDrawerState extends State<NavDrawer> {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Center(
-              child: Row(
-                children:  [
-                  const Expanded(
-                    child: Icon(
-                      Icons.account_circle,
+          InkWell(
+            onTap: ()=> openNewPage(context, const UserDetailsPage()),
+            child: DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                      const Spacer(flex: 1,),
+
+                      const Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      const Spacer(flex: 1,),
+                      Text(
+                        "${Auth.currentUser!.name}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const Spacer(flex: 4,),
+
+                    ],
+                  ),
+                  Text(
+                    "${Auth.currentUser!.email}",
+                    style: const TextStyle(
                       color: Colors.white,
-                      size: 40,
-                    ),
-                    flex: 2,
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Text(
-                      "${Auth.currentUser!.name}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      fontSize: 10,
                     ),
                   ),
-                  Expanded(
-                    flex: 6,
-                    child: Text(
-                      "${Auth.currentUser!.email}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),

@@ -9,29 +9,31 @@ import '../models/user_model.dart';
 import 'Fcm.dart';
 import 'api.dart';
 
-class Auth{
+class Auth {
   Auth._();
 
-  static UserApp? currentUser ;
+  static UserApp? currentUser;
 
-
-
-  static  FirebaseAuth _auth = FirebaseAuth.instance;
+  static FirebaseAuth _auth = FirebaseAuth.instance;
 
   //create new user email/password
-  static Future<UserApp?> signUpByEmailAndPass({
-    required UserApp userApp , required String email , required String password }) async {
+  static Future<UserApp?> signUpByEmailAndPass(
+      {required UserApp userApp,
+      required String email,
+      required String password}) async {
     try {
       UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email:email, password: password);
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-      userApp.uid = userCredential.user!.uid ;
+      userApp.uid = userCredential.user!.uid;
       return await Api.insertNewUser(
-        userApp: userApp,);
+        userApp: userApp,
+      );
     } on FirebaseAuthException catch (e) {
       //handle auth error
       if (e.code == "email-already-in-use") {
-        return Future.error('البريد الالكتروني مستخدم ، الرجاء اعادة استخدام بريد آخر');
+        return Future.error(
+            'البريد الالكتروني مستخدم ، الرجاء اعادة استخدام بريد آخر');
       } else if (e.code == "invalid-email") {
         return Future.error('البريد الالكتروني غير صحيح');
       } else if (e.code == "weak-password") {
@@ -46,51 +48,45 @@ class Auth{
     }
   }
 
-
   static Future<UserApp?> loginByEmailAndPass(
-      { String? email,String? password}) async {
+      {String? email, String? password}) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email ?? '', password: password ?? '');
 
       return await Api.getUserFromUid(userCredential.user!.uid);
     } on FirebaseAuthException catch (e) {
-
       if (e.code == "user-not-found") {
         return Future.error('لا يوجد سجل لهذا البريد الإلكتروني');
       }
 
-      if(e.code == "invalid-email") {
+      if (e.code == "invalid-email") {
         return Future.error('عنوان البريد الإلكتروني منسق بشكل سيئ');
       } else {
         return Future.error('البريد الالكتروني او كلمة المرور غير صحيحة');
       }
     }
   }
+
   static Future forgotPassword(String email) async {
-
     print('======== $email');
-    try{
+    try {
       await _auth.sendPasswordResetEmail(email: email);
-
-    }on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         return Future.error('لا يوجد سجل لهذا البريد الإلكتروني');
       }
 
-      if(e.code == "invalid-email") {
+      if (e.code == "invalid-email") {
         return Future.error('عنوان البريد الإلكتروني منسق بشكل سيئ');
       }
-
     }
-
   }
 
   static Future updateUserInPref(UserApp user) async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Map userMap ;
+    Map userMap;
 
     userMap = user.toJson();
 
@@ -117,18 +113,15 @@ class Auth{
       print('****** ${e.toString()}');
       return null;
     }
-    Map<String , dynamic> userMap = json.decode(jsonUser);
+    Map<String, dynamic> userMap = json.decode(jsonUser);
 
     return UserApp.fromJson(userMap);
   }
 
-  static Future logout()async{
+  static Future logout() async {
     await _auth.signOut();
     Fcm.unSubscribeToTopic(currentUser!.uid!);
     removeUserFromPref();
-    currentUser = null ;
+    currentUser = null;
   }
-
-
-
 }

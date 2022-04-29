@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class Fcm {
 
-  static  String _serverKey = "AAAABJVXcy0:APA91bGRZnmviUwfOdQdKRJMF8X8mldUoELYB1DZ2UXVVE2Iio7dHLmprHncRIDSv2KkButbevjDFFfjH2bF_l4Yv3U5_XwkN3TVNIvJ88lPur_wym5Gph86GM2oQDOmv8-lDWOe31Ni";
+  static  const String _serverKey = "AAAABJVXcy0:APA91bGRZnmviUwfOdQdKRJMF8X8mldUoELYB1DZ2UXVVE2Iio7dHLmprHncRIDSv2KkButbevjDFFfjH2bF_l4Yv3U5_XwkN3TVNIvJ88lPur_wym5Gph86GM2oQDOmv8-lDWOe31Ni";
 
   static  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
