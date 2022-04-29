@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zainusersapp/pages/splash_page.dart';
 import 'package:zainusersapp/pages/suggestions_page.dart';
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(16.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 1.1),
-                itemBuilder: (_, index) {
+                  itemBuilder: (_, index) {
                   AreasModel model = areasList![index];
                   return Card(
                     elevation: 8,
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const Spacer(flex: 1,),
                         Text(
                           '${model.state}',
                           maxLines: 2,
@@ -65,6 +67,34 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const Spacer(),
+                        !model.isBlocked!
+                            ? Container(
+                                width: double.infinity,
+                                color: Colors.greenAccent,
+                                alignment: Alignment.bottomCenter,
+                                child: const Text(
+                                  'متاح',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22.0,
+
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                color: Colors.redAccent,
+                                alignment: Alignment.bottomCenter,
+                                width: double.infinity,
+                                child: const Text(
+                                  'غير متاح',
+                                  style: TextStyle(
+                                      fontSize: 22.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                       ],
                     ),
                   );

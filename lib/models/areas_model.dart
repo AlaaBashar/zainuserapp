@@ -1,18 +1,24 @@
 class AreasModel{
 
   String? state;
+  bool? isBlocked;
+  String? id;
 
-  AreasModel({this.state,});
+  AreasModel({this.state,this.isBlocked,this.id});
 
 
   factory AreasModel.fromJson(Map<String, dynamic> json) {
     return AreasModel(
       state: json["state"],
+      isBlocked: json["isBlocked"],
+      id: json["id"],
     );
   }
   Map<String, dynamic> toJson() {
     return {
-      "state": this.state,
+      "state": state,
+      "isBlocked": isBlocked,
+      "id": id,
 
     };
   }

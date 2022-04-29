@@ -15,11 +15,10 @@ import 'Fcm.dart';
 import 'constants.dart';
 
 class Api {
+
   static FirebaseFirestore db = FirebaseFirestore.instance;
 
-  static Future insertNewUser({
-    required UserApp userApp,
-  }) async {
+  static Future insertNewUser({required UserApp userApp,}) async {
     try {
       await db
           .collection(CollectionsKey.USERS)
@@ -85,8 +84,9 @@ class Api {
         .map((e) => ComplaintModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    if (complaintList.isNotEmpty)
+    if (complaintList.isNotEmpty) {
       complaintList.sort((a, b) => b.date!.compareTo(a.date!));
+    }
 
     return complaintList;
   }
@@ -103,8 +103,9 @@ class Api {
         .map((e) => SuggestionModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    if (suggestionsList.isNotEmpty)
+    if (suggestionsList.isNotEmpty) {
       suggestionsList.sort((a, b) => b.date!.compareTo(a.date!));
+    }
 
     return suggestionsList;
   }
@@ -131,8 +132,9 @@ class Api {
         .map((e) => ContractModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    if (contractsList.isNotEmpty)
+    if (contractsList.isNotEmpty) {
       contractsList.sort((a, b) => b.date!.compareTo(a.date!));
+    }
 
     return contractsList;
   }
@@ -151,10 +153,10 @@ class Api {
     model!.id = docId;
     CollectionReference  doc = db.collection(CollectionsKey.CONTRACTS);
     await doc.doc(model.id).update(model.toJson());
+
     Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})',
         'الاقتراح : ${model.employeeName}');
   }
-
 
   static Future<List<VisitsModel>> getVisits() async {
     List<VisitsModel> visitsList = [];
@@ -165,8 +167,9 @@ class Api {
         .map((e) => VisitsModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    if (visitsList.isNotEmpty)
+    if (visitsList.isNotEmpty) {
       visitsList.sort((a, b) => b.date!.compareTo(a.date!));
+    }
 
     return visitsList;
   }
@@ -180,9 +183,7 @@ class Api {
         'الاقتراح : ${model.date}');
   }
 
-
-  static Future<dynamic> uploadFile(
-      {required File imageFile, required String folderPath}) async {
+  static Future<dynamic> uploadFile({required File imageFile, required String folderPath}) async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     Reference reference =
