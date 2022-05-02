@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:zainusersapp/models/contract_model.dart';
 
 import '../export_feature.dart';
@@ -64,40 +63,39 @@ class _ContractPageState extends State<ContractPage> {
                           Expanded(child: Divider()),
                         ],
                       ),
-                      Text('اسم العميل : ${model.customerName}',),
+                      contractsText(labels:'اسم العميل' ,text:model.customerName),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('رقم العميل : ${model.customerNumber}'),
+                      contractsText(labels:'رقم العميل' ,text:model.customerNumber),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('رقم البناء : ${model.buildCode}'),
+                      contractsText(labels:'رقم البناء' ,text:model.buildCode),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('العرض : ${model.offer}'),
+                      contractsText(labels:'العرض' ,text:model.offer),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('مدة الالتزام : ${model.commitmentDuration}'),
+                      contractsText(labels:'مدة الالتزام' ,text:model.commitmentDuration),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('السرعة : ${model.speed}'),
+                      contractsText(labels:'السرعة' ,text:model.speed),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('توقيع العميل : ${model.customerSignature}'),
+                      contractsText(labels:'توقيع العميل' ,text:model.customerSignature),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('اسم الموظف : ${model.employeeName}'),
+                      contractsText(labels:'اسم الموظف' ,text:model.employeeName),
                       const SizedBox(
                         height: 8.0,
                       ),
-                      Text(
-                          'التاريخ : ${DateFormat('yyyy/MM/hh  hh:mm a').format(model.date!)}'),
+                      contractsText(labels:'التاريخ' ,text:dataFormat(date: model.date)),
                       const SizedBox(
                         height: 6.0,
                       ),
@@ -128,7 +126,22 @@ class _ContractPageState extends State<ContractPage> {
           : getCenterCircularProgress(),
     );
   }
+  Widget contractsText({dynamic text, String? labels}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          '$text',
+        ),
+        Text(
+          '$labels : ',
+          textDirection: TextDirection.rtl,
+          style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
+        ),
+      ],
+    );
+  }
   void loadMyContracts() async {
     contractsList = await Api.getContracts();
     setState(() {});

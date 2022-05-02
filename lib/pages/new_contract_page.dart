@@ -57,7 +57,7 @@ class _NewContractPageState extends State<NewContractPage> {
                   isRTL: true,
                   type: TextInputType.text,
                   validator: (str) =>
-                  str!.length < 10 ? 'الاسم من اربع مقاطع' : null,
+                  str!.isEmpty? 'يرجى ادخال الاسم' : null,
 
                 ),
                 TextFieldApp(
@@ -66,7 +66,7 @@ class _NewContractPageState extends State<NewContractPage> {
                   icon: const Icon(Icons.phone),
                   isRTL: true,
                   type: TextInputType.phone,
-                  validator: (str) => str!.isEmpty ? 'رقم الموبايل غير صحيح' : null,
+                  validator: (str) => str!.isEmpty ? 'يرجى ادخال رقم الموبايل' : null,
                 ),
                 TextFieldApp(
                   controller: buildCodeController,
@@ -92,7 +92,7 @@ class _NewContractPageState extends State<NewContractPage> {
                         hintText: 'السرعة',
                         icon: const Icon(Icons.speed),
                         isRTL: true,
-                        type: TextInputType.phone,
+                        type: TextInputType.number,
                         validator: (str) => str!.isEmpty ? 'يرجى ادخال السرعة' : null,
                       ),
                     ),
@@ -102,7 +102,7 @@ class _NewContractPageState extends State<NewContractPage> {
                         hintText: 'مدة الالتزام',
                         icon: const Icon(Icons.access_time),
                         isRTL: true,
-                        type: TextInputType.text,
+                        type: TextInputType.number,
                         validator: (str) => str!.isEmpty ? 'يرجى ادخال مدة الالتزام' : null,
                       ),
                     ),
@@ -123,7 +123,7 @@ class _NewContractPageState extends State<NewContractPage> {
                   isRTL: true,
                   type: TextInputType.text,
                   validator: (str) =>
-                  str!.length < 10 ? 'الاسم من اربع مقاطع' : null,
+                  str!.isEmpty ? 'يرجى ادخال اسم الموظف' : null,
                 ),
                 Container(
                   width: getScreenWidth(context),

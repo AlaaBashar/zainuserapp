@@ -38,7 +38,7 @@ dependencies:
 
   #Widget_Package
   cached_network_image: ^3.2.0
-
+  localization: ^2.1.0
   #Firebase_Package
   firebase_core: ^1.14.1
   firebase_auth: ^3.3.14

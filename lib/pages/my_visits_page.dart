@@ -1,14 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:zainusersapp/models/areas_model.dart';
 import '../export_feature.dart';
 import '../models/complaint_model.dart';
 import '../models/visits_model.dart';
 import '../network/api.dart';
 import 'create_new_visit_page.dart';
 
-
 class MyVisitPage extends StatefulWidget {
-  const MyVisitPage({Key? key}) : super(key: key);
+  AreasModel? areasModel;
+    MyVisitPage({Key? key,required this.areasModel}) : super(key: key);
 
   @override
   _MyVisitPageState createState() => _MyVisitPageState();
@@ -30,88 +31,86 @@ class _MyVisitPageState extends State<MyVisitPage> {
       appBar: AppBar(
         title: const Text('الزيارات'),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: !widget.areasModel!.isBlocked! ? FloatingActionButton(
         child: const Icon(Icons.add),
         tooltip: 'انشاء زيارة جديدة',
-        onPressed: onNewVisit,
-      ),
+        onPressed: ()=>onNewVisit(areasModel: widget.areasModel),
+      ):null,
       body: visitsList != null
           ? ListView.builder(
-          itemCount: visitsList!.length,
-          padding: const EdgeInsets.all(8.0),
-          itemBuilder: (_, index) {
-            VisitsModel model = visitsList![index];
-            return Padding(
+              itemCount: visitsList!.length,
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child:Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: const <Widget>[
-                          Expanded(child: Divider()),
-                          Text(
-                            " الزيارة ",
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Expanded(child: Divider()),
-                        ],
+              itemBuilder: (_, index) {
+                VisitsModel model = visitsList![index];
+                return Container(
+                  child: model.areaId == widget.areasModel!.id? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: const <Widget>[
+                                Expanded(child: Divider()),
+                                Text(
+                                  " الزيارة ",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Expanded(child: Divider()),
+                              ],
+                            ),
+                            visitText(labels:'الاسم الاول' ,text:model.firstName),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'الاسم الثاني' ,text:model.secondName),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'الاسم الثالث' ,text:model.thirdName),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'ID' ,text:model.id),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'ID No' ,text:model.idType),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'تاريخ الميلاد' ,text:model.dateOfBirth),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'الجنس' ,text:model.gender),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'الجنسية' ,text:model.nationality),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'internet usage' ,text:model.internetUsage),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'مدة الألتزام' ,text:model.commitmentDuration),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'السعر لكل شهر' ,text:model.pricePerMonth),
+                            const SizedBox(height: 8.0),
+                            visitText(labels:'نهاية الزيارة' ,text:model.endVisit),
+
+                          ],
+                        ),
                       ),
-                      Text('الاسم الاول : ${model.firstName}',),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('الاسم الثاني : ${model.secondName}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('الاسم الثالث : ${model.thirdName}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('تاريخ الميلاد : ${model.dateOfBirth}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('الجنسية : ${model.nationality}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('الاستخدام الداخلي : ${model.internalUsage}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('السعر لكل شهر : ${model.pricePerMonth}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('مدة الالتزام : ${model.commitmentDuration}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('نهاية الزيارة : ${model.endVisit}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(' ID : ${model.idType}'),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('تاريخ الزيارة : ${DateFormat('yyyy/MM/hh  hh:mm a').format(model.date!)}'),
-                      const SizedBox(
-                        height: 6.0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          })
+                    ),
+                  ):null,
+                );
+              })
           : getCenterCircularProgress(),
+    );
+  }
+
+  Widget visitText({dynamic text, String? labels}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          '$text',
+        ),
+        Text(
+          '$labels : ',
+          textDirection: TextDirection.rtl,
+          style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
+
+        ),
+      ],
     );
   }
 
@@ -121,43 +120,44 @@ class _MyVisitPageState extends State<MyVisitPage> {
   }
 
   Widget getStatus(ComplaintModel model) {
-
-    if(model.complaintStatus == ComplaintStatus.Pending){
-      return const Text('قيد الانتظار' ,
+    if (model.complaintStatus == ComplaintStatus.Pending) {
+      return const Text(
+        'قيد الانتظار',
         style: TextStyle(
-          color:  Colors.yellow,
+          color: Colors.yellow,
           fontWeight: FontWeight.bold,
-        ),);
+        ),
+      );
+    } else if (model.complaintStatus == ComplaintStatus.InProgress) {
+      return const Text(
+        'قيد المعالجة',
+        style: TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (model.complaintStatus == ComplaintStatus.Completed) {
+      return const Text(
+        'تمة المعالجة',
+        style: TextStyle(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (model.complaintStatus == ComplaintStatus.Canceled) {
+      return const Text(
+        'ملغي',
+        style: TextStyle(
+          color: Colors.red,
+          fontWeight: FontWeight.bold,
+        ),
+      );
     }
 
-    else if(model.complaintStatus == ComplaintStatus.InProgress){
-      return const Text('قيد المعالجة',
-        style: TextStyle(
-          color:  Colors.blue,
-          fontWeight: FontWeight.bold,
-        ),);
-    }
-
-    else if(model.complaintStatus == ComplaintStatus.Completed){
-      return const Text('تمة المعالجة',
-        style: TextStyle(
-          color:  Colors.green,
-          fontWeight: FontWeight.bold,
-        ),);
-    }
-
-    else if(model.complaintStatus == ComplaintStatus.Canceled){
-      return  const Text('ملغي',
-        style: TextStyle(
-          color:  Colors.red,
-          fontWeight: FontWeight.bold,
-        ),);
-    }
-
-    return const SizedBox() ;
+    return const SizedBox();
   }
 
-  void onNewVisit() {
-    openNewPage(context, const NewVisitPage());
+  void onNewVisit({AreasModel? areasModel}) {
+    openNewPage(context,  NewVisitPage(areasModel: areasModel,));
   }
 }

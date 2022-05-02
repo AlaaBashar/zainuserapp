@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProgressCircleDialog {
   static bool _isShow = false;
@@ -111,3 +112,7 @@ bool isValidEmail(String email) {
       .hasMatch(email);
 }
 
+String dataFormat({DateTime? date}){
+
+  return DateFormat('yyyy/MM/hh  hh:mm a').format(date!);
+}

@@ -27,7 +27,7 @@ class _OffersPageState extends State<OffersPage> {
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text('الاقتراحات'),
+        title: const Text('العروض'),
       ),
       body: Container(
         child: offersList != null
@@ -56,11 +56,11 @@ class _OffersPageState extends State<OffersPage> {
                           Expanded(child: Divider()),
                         ],
                       ),
-                      Text('السرعة : ${model.speed}'),
+                      offersText(labels:'السرعة',text:model.speed ,),
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text('السعر : ${model.price}'),
+                      offersText(labels:'السعر',text:model.price ,),
                       const SizedBox(
                         height: 8.0,
                       ),
@@ -75,7 +75,22 @@ class _OffersPageState extends State<OffersPage> {
       ),
     );
   }
+  Widget offersText({dynamic text, String? labels}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          '$text',
+        ),
+        Text(
+          '$labels : ',
+          textDirection: TextDirection.rtl,
+          style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
+        ),
+      ],
+    );
+  }
   void loadMyOffers() async {
     offersList = await Api.getOffers();
     setState(() {});

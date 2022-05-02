@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../dialog/add_suggestion_dialog.dart';
 import '../export_feature.dart';
@@ -51,6 +50,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+
                               children: const <Widget>[
                                 Expanded(child: Divider()),
                                 Text(
@@ -62,16 +62,15 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                                 Expanded(child: Divider()),
                               ],
                             ),
-                            Text('عنوان الاقتراح : ${model.title}'),
+                            suggestText(labels:'عنوان الاقتراح' ,text:model.title),
                             const SizedBox(
                               height: 5.0,
                             ),
-                            Text('تفاصيل الاقتراح : ${model.des}'),
+                            suggestText(labels:'تفاصيل الاقتراح' ,text:model.des),
                             const SizedBox(
                               height: 8.0,
                             ),
-                            Text(
-                                'التاريخ : ${DateFormat('yyyy/MM/hh  hh:mm a').format(model.date!)}'),
+                            suggestText(labels:'التاريخ' ,text:dataFormat(date: model.date)),
                             const SizedBox(
                               height: 6.0,
                             ),
@@ -91,9 +90,12 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                               height: 5.0,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                const Text('حالة الاقتراح : '),
                                 getStatus(model),
+                                const Text('حالة الاقتراح : ',textDirection: TextDirection.rtl,
+                                  style:TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                           ],
@@ -107,7 +109,22 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       ),
     );
   }
+  Widget suggestText({dynamic text, String? labels}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          '$text',
+        ),
+        Text(
+          '$labels : ',
+          textDirection: TextDirection.rtl,
+          style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
+        ),
+      ],
+    );
+  }
   void loadMySuggestions() async {
     suggestionsList = await Api.getSuggestions();
     setState(() {});

@@ -161,7 +161,10 @@ class Api {
   static Future<List<VisitsModel>> getVisits() async {
     List<VisitsModel> visitsList = [];
 
-    QuerySnapshot querySnapshot = await db.collection(CollectionsKey.VISITS).where('userUid', isEqualTo: Auth.currentUser!.uid).get();
+    QuerySnapshot querySnapshot = await db
+        .collection(CollectionsKey.VISITS)
+        .where('userUid', isEqualTo: Auth.currentUser!.uid,)
+        .get();
 
     visitsList = querySnapshot.docs
         .map((e) => VisitsModel.fromJson(e.data() as Map<String, dynamic>))
@@ -176,11 +179,10 @@ class Api {
 
   static Future setVisits(VisitsModel model) async {
     DocumentReference doc = db.collection(CollectionsKey.VISITS).doc();
-    model.id = doc.id;
+    model.docId = doc.id;
     await doc.set(model.toJson());
 
-    Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})',
-        'الاقتراح : ${model.date}');
+    Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})','الاقتراح : ${model.date}');
   }
 
   static Future<dynamic> uploadFile({required File imageFile, required String folderPath}) async {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +39,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         backgroundColor: const Color(0xFFE8E8E8),
         endDrawer: const NavDrawer(),
         appBar: AppBar(
+
           title: const Text('الصفحة الرئيسية'),
         ),
         body: areasList != null
@@ -50,52 +54,55 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: 2, childAspectRatio: 1.1),
                   itemBuilder: (_, index) {
                   AreasModel model = areasList![index];
-                  return Card(
-                    elevation: 8,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Spacer(flex: 1,),
-                        Text(
-                          '${model.state}',
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
+                  return InkWell(
+                    onTap: ()=> onVisit(areasModel:model),
+                    child: Card(
+                      elevation: 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Spacer(flex: 1,),
+                          Text(
+                            '${model.state}',
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        !model.isBlocked!
-                            ? Container(
-                                width: double.infinity,
-                                color: Colors.greenAccent,
-                                alignment: Alignment.bottomCenter,
-                                child: const Text(
-                                  'متاح',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22.0,
+                          const Spacer(),
+                          !model.isBlocked!
+                              ? Container(
+                                  width: double.infinity,
+                                  color: Colors.greenAccent,
+                                  alignment: Alignment.bottomCenter,
+                                  child: const Text(
+                                    'متاح',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.0,
 
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: Colors.redAccent,
+                                  alignment: Alignment.bottomCenter,
+                                  width: double.infinity,
+                                  child: const Text(
+                                    'غير متاح',
+                                    style: TextStyle(
+                                        fontSize: 22.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              )
-                            : Container(
-                                color: Colors.redAccent,
-                                alignment: Alignment.bottomCenter,
-                                width: double.infinity,
-                                child: const Text(
-                                  'غير متاح',
-                                  style: TextStyle(
-                                      fontSize: 22.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -106,6 +113,9 @@ class _HomePageState extends State<HomePage> {
   void loadAreas() async {
     areasList = await Api.getAreas();
     setState(() {});
+  }
+   void onVisit({AreasModel? areasModel}) {
+     openNewPage(context,  MyVisitPage(areasModel: areasModel));
   }
 }
 
@@ -138,6 +148,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: Colors.blue,
               ),
               child: Column(
+
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -217,17 +228,6 @@ class _NavDrawerState extends State<NavDrawer> {
             color: Colors.grey,
           ),
           ListTile(
-            title: const Text("انشاء زيارة جديدة"),
-            leading: IconButton(
-              icon: const Icon(Icons.drive_file_rename_outline),
-              onPressed: () {},
-            ),
-            onTap: onVisit,
-          ),
-          const Divider(
-            color: Colors.grey,
-          ),
-          ListTile(
             title: const Text("تسجيل الخروج"),
             leading: IconButton(
               icon: const Icon(Icons.logout),
@@ -251,9 +251,7 @@ class _NavDrawerState extends State<NavDrawer> {
   void onSuggestions() {
     openNewPage(context, const SuggestionsPage());
   }
-  void onVisit() {
-    openNewPage(context, const MyVisitPage());
-  }
+
 
   void onOffer() {
     openNewPage(context, const OffersPage());
