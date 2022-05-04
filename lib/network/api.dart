@@ -145,8 +145,8 @@ class Api {
     model.id = doc.id;
     await doc.set(model.toJson());
 
-    Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})',
-        'الاقتراح : ${model.employeeName}');
+    Fcm.sendNotificationToAdmin('يوجد عقد جديد من (${model.user!.name})',
+        'عقد : ${model.employeeName}');
   }
 
   static Future editContract(ContractModel? model,String? docId) async {
@@ -154,8 +154,6 @@ class Api {
     CollectionReference  doc = db.collection(CollectionsKey.CONTRACTS);
     await doc.doc(model.id).update(model.toJson());
 
-    Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})',
-        'الاقتراح : ${model.employeeName}');
   }
 
   static Future<List<VisitsModel>> getVisits() async {
@@ -182,7 +180,7 @@ class Api {
     model.docId = doc.id;
     await doc.set(model.toJson());
 
-    Fcm.sendNotificationToAdmin('يوجد اقتراح جديد من (${model.user!.name})','الاقتراح : ${model.date}');
+    Fcm.sendNotificationToAdmin('يوجد زيارة جديد من (${model.user!.email})','المنطقة : ${model.area!.state}');
   }
 
   static Future<dynamic> uploadFile({required File imageFile, required String folderPath}) async {
@@ -211,8 +209,8 @@ class Api {
         .map((e) => OffersModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    // if(offerModel.isNotEmpty) {
-    //   offerModel.sort((a, b) => b.date!.compareTo(a.date!));
+    // if(offerList.isNotEmpty) {
+    //   offerList.sort((a, b) => b.date!.compareTo(a.date!));
     // }
 
     return offerList;
@@ -233,7 +231,5 @@ class Api {
 
     return areasList;
   }
-
-
 
 }

@@ -25,9 +25,11 @@ class _ContractPageState extends State<ContractPage> {
     loadMyContracts();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: const Text('العقود'),
       ),
@@ -39,7 +41,7 @@ class _ContractPageState extends State<ContractPage> {
       body: contractsList != null
           ? ListView.builder(
           itemCount: contractsList!.length,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(bottom: 110),
           itemBuilder: (_, index) {
             ContractModel model = contractsList![index];
             return Padding(
@@ -113,7 +115,6 @@ class _ContractPageState extends State<ContractPage> {
                           },
                         ),
                       ),
-
                       const SizedBox(
                         height: 5.0,
                       ),
@@ -128,17 +129,18 @@ class _ContractPageState extends State<ContractPage> {
   }
   Widget contractsText({dynamic text, String? labels}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          '$text',
-        ),
         Text(
           '$labels : ',
           textDirection: TextDirection.rtl,
           style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
         ),
+        Text(
+          '$text',
+        ),
+
       ],
     );
   }
@@ -146,7 +148,6 @@ class _ContractPageState extends State<ContractPage> {
     contractsList = await Api.getContracts();
     setState(() {});
   }
-
   Widget getStatus(ComplaintModel model) {
 
     if(model.complaintStatus == ComplaintStatus.Pending){
@@ -185,9 +186,21 @@ class _ContractPageState extends State<ContractPage> {
   }
 
   void onNewContract() {
-    openNewPage(context, const NewContractPage());
+     openNewPage(context,  NewContractPage(x: 5,)).then((value) {
+       print(value);
+      if(value == true){
+        loadMyContracts();
+      }
+  });
   }
    void onEditContract({ContractModel? model}) {
-    openNewPage(context,EditContractPage(model: model,));
+      openNewPage(context,EditContractPage(model: model,)).then((value) {
+        print(value);
+       if(value == true){
+         loadMyContracts();
+       }
+
+
+     });
   }
 }

@@ -112,7 +112,7 @@ bool isValidEmail(String email) {
       .hasMatch(email);
 }
 
-String dataFormat({DateTime? date}){
+  String dataFormat({DateTime? date}){
 
-  return DateFormat('yyyy/MM/hh  hh:mm a').format(date!);
-}
+    return DateFormat('yyyy/MM/hh  hh:mm a').format(date!);
+  }

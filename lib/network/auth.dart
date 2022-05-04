@@ -94,6 +94,7 @@ class Auth {
 
     currentUser = user;
     Fcm.subscribeToTopic(currentUser!.uid!);
+    Fcm.subscribeToTopic('system');
 
     prefs.setString('User_Pref', userJson);
   }

@@ -177,7 +177,6 @@ class _EditContractPageState extends State<EditContractPage> {
     String? employeeName = employeeNameController.text;
 
     ProgressCircleDialog.show(context);
-
     ContractModel contractModel = ContractModel();
     contractModel
       ..customerName = customerName
@@ -193,8 +192,9 @@ class _EditContractPageState extends State<EditContractPage> {
       ..user = Auth.currentUser;
     await Api.editContract(contractModel,modelId);
     ProgressCircleDialog.dismiss(context);
+    Navigator.pop(context , true) ;
 
-    //onNewContract();
+
 
 
   }

@@ -20,7 +20,7 @@ class TextFieldApp extends StatefulWidget {
 
   final FormFieldValidator<String>? validator;
 
-  final Function? onTap;
+  final VoidCallback? onTap;
 
   final ValueChanged<String>? onChanged;
 
@@ -124,8 +124,7 @@ class _TextFieldAppState extends State<TextFieldApp> {
               },
               maxLength: widget.maxLength,
               obscureText: widget.obscureText ?? false,
-              onTap: (){},
-
+              onTap: widget.onTap,
 
               cursorWidth: 1,
               onEditingComplete: widget.onActionComplete ??

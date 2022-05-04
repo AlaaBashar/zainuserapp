@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:zainusersapp/models/areas_model.dart';
 import 'package:zainusersapp/models/visits_model.dart';
 import 'package:zainusersapp/pages/contract_page.dart';
-import '../models/complaint_model.dart';
-import '../models/contract_model.dart';
+import '../models/user_model.dart';
 import '../network/api.dart';
 import '../network/auth.dart';
 import '../utils.dart';
@@ -32,6 +32,7 @@ class _NewVisitPageState extends State<NewVisitPage> {
   TextEditingController commitmentDurationController = TextEditingController();
   TextEditingController pricePerMonthController = TextEditingController();
   TextEditingController endVisitController = TextEditingController();
+  Gender genderSelected = Gender.Male;
   AreasModel? areasModel ;
   GlobalKey<FormState> newVisitFormKey = GlobalKey();
 
@@ -40,12 +41,12 @@ class _NewVisitPageState extends State<NewVisitPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      genderController.text = Auth.currentUser!.gender.toString();
       idController.text = Auth.currentUser!.id!.toString() ;
       areasModel = widget.areasModel;
     });
 
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,8 @@ class _NewVisitPageState extends State<NewVisitPage> {
           child: Container(
             margin: const EdgeInsets.only(top: 30.0),
             child: Column(
-              children: [
 
+              children: [
                 TextFieldApp(
                   controller: firstNameController,
                   hintText: 'الاسم الأول',
@@ -109,17 +110,140 @@ class _NewVisitPageState extends State<NewVisitPage> {
                   icon: const Icon(Icons.event),
                   isRTL: true,
                   type: TextInputType.datetime,
-                  validator: (str) => str!.isEmpty ? 'يرجى ادخال تاريخ الولادة' : null,
-                ),
-                TextFieldApp(
-                  controller: genderController,
-                  hintText: 'الجنس',
-                  icon: const Icon(Icons.wc),
-                  isRTL: true,
-                  type: TextInputType.text,
-                  validator: (str) =>
-                  str!.length < 10 ? 'يرجى ادخال الجنس' : null,
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.parse('1960-01-01') ,
+                      lastDate: DateTime.parse('2032-05-03'),
+                    ).then((value) {
+                      if(value != null) {
+                        setState(() {
+                        dateOfBirthController.text = DateFormat.yMMMd().format(value);
+                      });
 
+                      }
+                      else{
+                        return;
+                      }
+                     });
+                  },
+                  validator: (str) => str!.isEmpty ? 'يرجى ادخال تاريخ الميلاد' : null,
+                ),
+                Container(
+                  margin:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          child: InkWell(
+                            onTap: onPressedMale,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              height: 45.0,
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: genderSelected == Gender.Male
+                                        ? Colors.blueAccent
+                                        : Colors.transparent,
+                                    width: 1),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 5,
+                                    offset:
+                                    const Offset(0, 2), // changes position of shadow
+                                  )
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.male,
+                                      color: genderSelected == Gender.Male
+                                          ? Colors.blueAccent
+                                          : Colors.grey),
+                                  const Spacer(),
+                                  Text(
+                                    'ذكر',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: genderSelected == Gender.Male
+                                            ? Colors.blueAccent
+                                            : Theme.of(context)
+                                            .textTheme
+                                            .bodyText2!
+                                            .color),
+                                  ),
+                                  const Spacer(
+                                    flex: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                      const SizedBox(
+                        width: 16.0,
+                      ),
+                      Expanded(
+                          child: InkWell(
+                            onTap: onPressedFemale,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              height: 45.0,
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: genderSelected == Gender.Female
+                                        ? Colors.blueAccent
+                                        : Colors.transparent,
+                                    width: 1),
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 5,
+                                    offset:
+                                    const Offset(0, 2), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.female,
+                                      color: genderSelected == Gender.Female
+                                          ? Colors.blueAccent
+                                          : Colors.grey),
+                                  const Spacer(),
+                                  Text(
+                                    'انثى',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: genderSelected == Gender.Female
+                                            ? Colors.blueAccent
+                                            : Theme.of(context)
+                                            .textTheme
+                                            .bodyText2!
+                                            .color),
+                                  ),
+                                  const Spacer(
+                                    flex: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
                 ),
                 TextFieldApp(
                   controller: nationalityController,
@@ -160,9 +284,30 @@ class _NewVisitPageState extends State<NewVisitPage> {
                   hintText: 'نهاية الزيارة',
                   icon: const Icon(Icons.calendar_today),
                   isRTL: true,
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    FocusScope.of(context).requestFocus(FocusNode());
+
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now() ,
+                      lastDate: DateTime.parse('2025-05-03'),
+                    ).then((value) {
+                      if(value != null) {
+                        setState(() {
+                          endVisitController.text = DateFormat.yMMMd().format(value);
+                        });
+
+                      }
+                      else{
+                        return;
+                      }
+                    });
+                  },
                   type: const TextInputType.numberWithOptions(),
                   validator: (str) =>
-                  str!.isEmpty ? 'يرجى ادخال السعر لكل شهر' : null,
+                  str!.isEmpty ? 'يرجى ادخال نهاية الزيارة' : null,
                 ),
 
                 Container(
@@ -185,11 +330,21 @@ class _NewVisitPageState extends State<NewVisitPage> {
     );
   }
 
+  void onPressedMale() {
+    genderSelected = Gender.Male;
 
+    setState(() {});
+  }
+
+  void onPressedFemale() {
+    genderSelected = Gender.Female;
+
+    setState(() {});
+  }
   void onCreateNewVisit()async{
     if (!newVisitFormKey.currentState!.validate()) return;
     FocusManager.instance.primaryFocus?.unfocus();
-    String? gender = genderController.text.trim().toString();
+    String? gender = genderSelected.toString();
     String? nationality = nationalityController.text.trim();
     String? idType = idTypeController.text.trim();
     String? id = idController.text.trim();
@@ -203,7 +358,6 @@ class _NewVisitPageState extends State<NewVisitPage> {
     String? endVisit = endVisitController.text.trim();
 
     ProgressCircleDialog.show(context);
-
     VisitsModel visitsModel = VisitsModel();
     visitsModel
       ..gender = gender
@@ -225,11 +379,7 @@ class _NewVisitPageState extends State<NewVisitPage> {
       ..area = areasModel;
     await Api.setVisits(visitsModel);
     ProgressCircleDialog.dismiss(context);
-
-
-  }
-  void onNewContract() {
-    openNewPage(context, const ContractPage(),popPreviousPages: true);
+    Navigator.pop(context , true);
   }
 
 

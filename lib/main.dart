@@ -22,7 +22,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+      builder: (_, child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
+        );
+      },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme:lightMode,

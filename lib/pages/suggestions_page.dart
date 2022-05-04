@@ -38,7 +38,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
         child: suggestionsList != null
             ? ListView.builder(
                 itemCount: suggestionsList!.length,
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(bottom: 110),
                 itemBuilder: (_, index) {
                   SuggestionModel model = suggestionsList![index];
                   return Padding(
@@ -90,12 +90,12 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                               height: 5.0,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                getStatus(model),
                                 const Text('حالة الاقتراح : ',textDirection: TextDirection.rtl,
                                   style:TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
                                 ),
+                                getStatus(model),
                               ],
                             ),
                           ],
@@ -111,16 +111,16 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
   }
   Widget suggestText({dynamic text, String? labels}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          '$text',
-        ),
         Text(
           '$labels : ',
           textDirection: TextDirection.rtl,
           style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
+        ),
+        Text(
+          '$text',
         ),
       ],
     );

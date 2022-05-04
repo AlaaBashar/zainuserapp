@@ -25,6 +25,7 @@ class _MyVisitPageState extends State<MyVisitPage> {
     loadMyVisits();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +33,7 @@ class _MyVisitPageState extends State<MyVisitPage> {
         title: const Text('الزيارات'),
       ),
       floatingActionButton: !widget.areasModel!.isBlocked! ? FloatingActionButton(
+
         child: const Icon(Icons.add),
         tooltip: 'انشاء زيارة جديدة',
         onPressed: ()=>onNewVisit(areasModel: widget.areasModel),
@@ -39,7 +41,7 @@ class _MyVisitPageState extends State<MyVisitPage> {
       body: visitsList != null
           ? ListView.builder(
               itemCount: visitsList!.length,
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(bottom: 110.0),
               itemBuilder: (_, index) {
                 VisitsModel model = visitsList![index];
                 return Container(
@@ -74,7 +76,7 @@ class _MyVisitPageState extends State<MyVisitPage> {
                             const SizedBox(height: 8.0),
                             visitText(labels:'تاريخ الميلاد' ,text:model.dateOfBirth),
                             const SizedBox(height: 8.0),
-                            visitText(labels:'الجنس' ,text:model.gender),
+                            visitText(labels:'الجنس' ,text:model.gender =='Gender.Male' ? 'ذكر': 'انثى'),
                             const SizedBox(height: 8.0),
                             visitText(labels:'الجنسية' ,text:model.nationality),
                             const SizedBox(height: 8.0),
@@ -99,17 +101,17 @@ class _MyVisitPageState extends State<MyVisitPage> {
 
   Widget visitText({dynamic text, String? labels}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
-          '$text',
-        ),
-        Text(
           '$labels : ',
-          textDirection: TextDirection.rtl,
           style: const TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
 
         ),
+        Text(
+          '$text',
+        ),
+
       ],
     );
   }
@@ -158,6 +160,14 @@ class _MyVisitPageState extends State<MyVisitPage> {
   }
 
   void onNewVisit({AreasModel? areasModel}) {
-    openNewPage(context,  NewVisitPage(areasModel: areasModel,));
+    openNewPage(context,  NewVisitPage(areasModel: areasModel,)).then((value) {
+      print(value.toString());
+      if(value == true){
+        loadMyVisits();
+      }
+
+
+    });
   }
+
 }

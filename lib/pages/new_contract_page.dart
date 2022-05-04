@@ -9,7 +9,8 @@ import '../widget/text_field_app.dart';
 
 
 class NewContractPage extends StatefulWidget {
-  const NewContractPage({Key? key}) : super(key: key);
+  int? x;
+   NewContractPage({Key? key,this.x}) : super(key: key);
 
   @override
   _NewContractPageState createState() => _NewContractPageState();
@@ -42,6 +43,7 @@ class _NewContractPageState extends State<NewContractPage> {
         title: const Text('انشاء عقد جديد'),
       ),
       body: SingleChildScrollView(
+
         physics: const BouncingScrollPhysics(),
         child: Form(
           key: newContractFormKey,
@@ -173,14 +175,10 @@ class _NewContractPageState extends State<NewContractPage> {
       ..date = DateTime.now()
       ..userUid = Auth.currentUser!.uid
       ..user = Auth.currentUser;
-
     await Api.setContract(contractModel);
-    onNewContract();
+    ProgressCircleDialog.dismiss(context);
+    Navigator.pop(context, true) ;
 
-
-  }
-  void onNewContract() {
-    openNewPage(context, const ContractPage(),popPreviousPages: true);
   }
 
 

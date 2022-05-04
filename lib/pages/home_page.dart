@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zainusersapp/pages/splash_page.dart';
@@ -12,7 +9,6 @@ import '../models/ministries_model.dart';
 import '../models/user_model.dart';
 import '../network/api.dart';
 import '../network/auth.dart';
-import '../widget/reusable_cached_network_image.dart';
 import 'contract_page.dart';
 import 'my_visits_page.dart';
 import 'offers_page.dart';
@@ -41,13 +37,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
 
         backgroundColor: const Color(0xFFE8E8E8),
-        endDrawer: const NavDrawer(),
+        drawer: const NavDrawer(),
         appBar: AppBar(
-
           title: const Text('الصفحة الرئيسية'),
         ),
         body: areasList != null
             ? GridView.builder(
+
                 itemCount: areasList!.length,
                 padding: const EdgeInsets.all(16.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

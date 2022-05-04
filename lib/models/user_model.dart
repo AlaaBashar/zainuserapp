@@ -1,7 +1,7 @@
 import '../export_feature.dart';
 
 class UserApp {
-  String? id, uid, name, password, email , phone;
+  String? id, uid, name, password, email, phone;
   bool? isBlocked ;
   DateTime? date;
 
